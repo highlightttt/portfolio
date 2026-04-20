@@ -7,8 +7,8 @@ const CFG = {
   fontWeight: "900",
 
   // Particles
-  particleSize: 2,        // base dot radius
-  samplingGap: 4,         // pixel gap when sampling text (lower = more particles)
+  particleSize: 0.8,      // base dot radius — tiny dust
+  samplingGap: 2,         // pixel gap when sampling text (lower = more particles)
   particleColor: [255, 255, 255],
 
   // Render mode: "dot" | "char"
@@ -204,7 +204,7 @@ function render() {
       const dy = p.y - p.originY;
       const displacement = Math.sqrt(dx * dx + dy * dy);
       // Size grows slightly when displaced
-      const size = CFG.particleSize + Math.min(displacement * 0.02, 1.5);
+      const size = CFG.particleSize + Math.min(displacement * 0.01, 0.6);
       ctx.moveTo(p.x + size, p.y);
       ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
     }
