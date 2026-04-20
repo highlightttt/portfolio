@@ -22,7 +22,7 @@ const CFG = {
   turbulence: 0.3,
 
   // Physics (matching reference)
-  spring: 0.030,
+  spring: 0.015,
   damping: 0.73,
   breathing: 0.15,         // idle wandering amplitude
 
