@@ -3,13 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jesse Lai · Design Portfolio</title>
+  <title>Jesse Lai · Portfolio</title>
   <style>
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #000; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    h1 { font-weight: 200; font-size: 2rem; letter-spacing: 0.1em; }
+    * { margin: 0; padding: 0; }
+    body { background: #0a0a0a; overflow: hidden; cursor: none; }
+    canvas { display: block; }
+    #cursor {
+      position: fixed; pointer-events: none; z-index: 999;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s;
+    }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Coming Soon</h1>
+  <div id="cursor"></div>
+  <canvas id="c"></canvas>
+  <script src="particles.js?v=1"></script>
 </body>
 </html>
