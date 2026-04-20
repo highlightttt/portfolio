@@ -27,7 +27,7 @@ const CFG = {
   breathing: 0.15,         // idle wandering amplitude
 
   // Mouse
-  cursorRadius: 170,
+  cursorRadius: 85,
   dotSizeBoost: 3.0,       // size multiplier near cursor
 
   // Depth
