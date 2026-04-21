@@ -6,7 +6,7 @@ const CFG = {
     "(≧ω≦)",
     ",,Ծ‸Ծ,,",
   ],
-  textInterval: 2000,      // ms between transitions
+  textInterval: 3000,      // ms between transitions
   fontFamily: "-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif",
   fontSize: 180,
   fontWeight: "700",
