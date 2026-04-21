@@ -2,9 +2,9 @@
 const CFG = {
   // Text
   text: "Jesse\nLai",
-  fontFamily: "Noto Serif SC",
+  fontFamily: "-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif",
   fontSize: 180,
-  fontWeight: "900",
+  fontWeight: "700",
 
   // Particles
   particleSize: 1.0,
