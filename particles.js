@@ -2,7 +2,6 @@
 const CFG = {
   // Text rotation
   texts: [
-    "Jesse\nLai",
     "ʕ´• ᴥ•̥`ʔ",
     "(≧ω≦)",
     ",,Ծ‸Ծ,,",
