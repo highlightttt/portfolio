@@ -1,7 +1,13 @@
 // ─── CONFIG ───
 const CFG = {
-  // Text
-  text: "Jesse\nLai",
+  // Text rotation
+  texts: [
+    "Jesse\nLai",
+    "ʕ´• ᴥ•̥`ʔ",
+    "(≧ω≦)",
+    ",,Ծ‸Ծ,,",
+  ],
+  textInterval: 2000,      // ms between transitions
   fontFamily: "-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif",
   fontSize: 180,
   fontWeight: "700",
@@ -100,7 +106,7 @@ function smoothNoise(x, y) {
 let particles = [];
 let time = 0;
 
-function sampleText() {
+function sampleText(text) {
   const off = document.createElement("canvas");
   off.width = W * dpr;
   off.height = H * dpr;
@@ -111,12 +117,14 @@ function sampleText() {
   octx.fillRect(0, 0, W, H);
 
   octx.fillStyle = "#fff";
-  octx.font = `${CFG.fontWeight} ${CFG.fontSize}px "${CFG.fontFamily}"`;
+  // Auto-size font for kaomoji (single line = bigger)
+  const lines = text.split("\n");
+  const fontSize = lines.length > 1 ? CFG.fontSize : CFG.fontSize * 1.2;
+  octx.font = `${CFG.fontWeight} ${fontSize}px ${CFG.fontFamily}`;
   octx.textAlign = "center";
   octx.textBaseline = "middle";
 
-  const lines = CFG.text.split("\n");
-  const lineHeight = CFG.fontSize * 1.15;
+  const lineHeight = fontSize * 1.15;
   const totalHeight = lines.length * lineHeight;
   const startY = H / 2 - totalHeight / 2 + lineHeight / 2;
 
@@ -158,10 +166,45 @@ function sampleText() {
   return points;
 }
 
+let currentTextIndex = 0;
+
 function initParticles() {
   document.fonts.ready.then(() => {
-    particles = sampleText();
+    particles = sampleText(CFG.texts[0]);
+    // Start text rotation
+    setInterval(transitionToNextText, CFG.textInterval);
   });
+}
+
+function transitionToNextText() {
+  currentTextIndex = (currentTextIndex + 1) % CFG.texts.length;
+  const newPoints = sampleText(CFG.texts[currentTextIndex]);
+
+  // Morph: reuse existing particles where possible, add/remove as needed
+  const maxLen = Math.max(particles.length, newPoints.length);
+  const merged = [];
+
+  for (let i = 0; i < maxLen; i++) {
+    if (i < particles.length && i < newPoints.length) {
+      // Existing particle → update target
+      const p = particles[i];
+      p.originX = newPoints[i].originX;
+      p.originY = newPoints[i].originY;
+      merged.push(p);
+    } else if (i < newPoints.length) {
+      // New particle needed — spawn from random existing particle's position
+      const src = particles[Math.floor(Math.random() * particles.length)];
+      const np = newPoints[i];
+      np.x = src ? src.x : np.originX;
+      np.y = src ? src.y : np.originY;
+      np.vx = (Math.random() - 0.5) * 2;
+      np.vy = (Math.random() - 0.5) * 2;
+      merged.push(np);
+    }
+    // else: excess old particles are dropped (they'll fade by not being drawn)
+  }
+
+  particles = merged;
 }
 initParticles();
 
