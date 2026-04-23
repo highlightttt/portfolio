@@ -8,7 +8,7 @@
     fontWeight: "700",
 
     // Text particles
-    samplingGap: 2,     // CSS pixels
+    samplingGap: 2,
     particleSize: 1.0,
     depthRange: 0.6,
 
@@ -27,53 +27,42 @@
     skyTop: 0x1e5ac6,
     skyBottom: 0x50a0eb,
 
-    // Clouds
-    cloudPuffs: [
-      // Big cloud bottom-right: multiple overlapping sprites
-      { x: 0.65, y: 0.62, scale: 2.2, alpha: 0.85 },
-      { x: 0.72, y: 0.65, scale: 1.8, alpha: 0.8 },
-      { x: 0.58, y: 0.64, scale: 1.6, alpha: 0.75 },
-      { x: 0.68, y: 0.58, scale: 1.4, alpha: 0.7 },
-      { x: 0.75, y: 0.60, scale: 1.5, alpha: 0.65 },
-      { x: 0.62, y: 0.68, scale: 1.3, alpha: 0.6 },
+    // Clouds — pure dot particles, no gradients
+    cloudCount: 60000,
+    cloudMinSize: 0.4,
+    cloudMaxSize: 2.5,
+    cloudWindSpeed: 6,
+    cloudBreathing: 0.25,
+    cloudMouseRadius: 170,
+    cloudMouseForce: 25,
 
-      // Big cloud bottom-left
-      { x: 0.22, y: 0.68, scale: 2.0, alpha: 0.8 },
-      { x: 0.28, y: 0.70, scale: 1.6, alpha: 0.75 },
-      { x: 0.18, y: 0.72, scale: 1.4, alpha: 0.7 },
-      { x: 0.25, y: 0.64, scale: 1.2, alpha: 0.65 },
-      { x: 0.30, y: 0.66, scale: 1.3, alpha: 0.6 },
-
-      // Medium cloud top-right
-      { x: 0.82, y: 0.28, scale: 1.4, alpha: 0.7 },
-      { x: 0.87, y: 0.30, scale: 1.1, alpha: 0.6 },
-      { x: 0.79, y: 0.26, scale: 1.0, alpha: 0.55 },
-
-      // Small cloud top-left
-      { x: 0.14, y: 0.24, scale: 1.0, alpha: 0.6 },
-      { x: 0.18, y: 0.22, scale: 0.8, alpha: 0.5 },
-
-      // Wispy middle
-      { x: 0.45, y: 0.48, scale: 1.5, alpha: 0.5 },
-      { x: 0.52, y: 0.46, scale: 1.2, alpha: 0.45 },
-      { x: 0.40, y: 0.50, scale: 1.0, alpha: 0.4 },
-      { x: 0.56, y: 0.49, scale: 0.9, alpha: 0.35 },
-
-      // Bottom horizon haze
-      { x: 0.30, y: 0.90, scale: 2.5, alpha: 0.5 },
-      { x: 0.50, y: 0.92, scale: 2.8, alpha: 0.55 },
-      { x: 0.70, y: 0.90, scale: 2.5, alpha: 0.5 },
-      { x: 0.15, y: 0.93, scale: 2.0, alpha: 0.4 },
-      { x: 0.85, y: 0.91, scale: 2.0, alpha: 0.4 },
+    // Cloud shapes: puffs compose each cloud
+    clouds: [
+      { cx: 0.65, cy: 0.62, r: 0.12, count: 14000, puffs: [
+        {ox: 0, oy: 0, r: 1.0}, {ox: -0.6, oy: 0.1, r: 0.7}, {ox: 0.5, oy: -0.1, r: 0.8},
+        {ox: -0.3, oy: -0.3, r: 0.6}, {ox: 0.3, oy: -0.25, r: 0.65}, {ox: 0.7, oy: 0.2, r: 0.5},
+        {ox: -0.8, oy: -0.05, r: 0.45}, {ox: 0.1, oy: 0.25, r: 0.55},
+      ]},
+      { cx: 0.22, cy: 0.68, r: 0.10, count: 11000, puffs: [
+        {ox: 0, oy: 0, r: 1.0}, {ox: -0.5, oy: -0.15, r: 0.7}, {ox: 0.6, oy: 0.05, r: 0.65},
+        {ox: 0.2, oy: -0.3, r: 0.6}, {ox: -0.3, oy: 0.2, r: 0.5}, {ox: 0.5, oy: -0.2, r: 0.4},
+      ]},
+      { cx: 0.82, cy: 0.28, r: 0.07, count: 7000, puffs: [
+        {ox: 0, oy: 0, r: 1.0}, {ox: -0.5, oy: 0.1, r: 0.6}, {ox: 0.4, oy: -0.1, r: 0.7},
+        {ox: 0.6, oy: 0.15, r: 0.4},
+      ]},
+      { cx: 0.14, cy: 0.24, r: 0.05, count: 5000, puffs: [
+        {ox: 0, oy: 0, r: 1.0}, {ox: 0.5, oy: -0.1, r: 0.6}, {ox: -0.4, oy: 0.1, r: 0.5},
+      ]},
+      { cx: 0.48, cy: 0.48, r: 0.09, count: 8000, puffs: [
+        {ox: -0.5, oy: 0, r: 0.6}, {ox: 0, oy: 0, r: 0.7}, {ox: 0.5, oy: 0, r: 0.6},
+        {ox: -0.9, oy: 0.05, r: 0.35}, {ox: 0.9, oy: -0.05, r: 0.35},
+      ]},
+      { cx: 0.50, cy: 0.90, r: 0.07, count: 15000, puffs: [
+        {ox: -1.8, oy: 0, r: 0.6}, {ox: -1.0, oy: 0, r: 0.7}, {ox: -0.3, oy: 0, r: 0.8},
+        {ox: 0.3, oy: 0, r: 0.8}, {ox: 1.0, oy: 0, r: 0.7}, {ox: 1.8, oy: 0, r: 0.6},
+      ]},
     ],
-    cloudWindSpeed: 5, // px/s
-    cloudMouseRadius: 200,
-    cloudMouseForce: 30,
-
-    // Cloud particles (small dots within cloud regions)
-    cloudDotCount: 15000,
-    cloudDotSize: 1.2,
-    cloudDotAlpha: 0.4,
   };
 
   const W = window.innerWidth;
@@ -88,13 +77,12 @@
     resolution: dpr,
     autoDensity: true,
     backgroundColor: CFG.skyTop,
-    antialias: true,
+    antialias: false,
   });
   document.body.appendChild(app.canvas);
 
-  // ─── SKY GRADIENT ───
+  // ─── SKY GRADIENT (strip-based, no radial) ───
   const skyGfx = new PIXI.Graphics();
-  // Draw gradient with horizontal strips
   const steps = 64;
   for (let i = 0; i < steps; i++) {
     const t = i / steps;
@@ -103,95 +91,21 @@
     const r = Math.round(r1 + (r2 - r1) * t);
     const g = Math.round(g1 + (g2 - g1) * t);
     const b = Math.round(b1 + (b2 - b1) * t);
-    const color = (r << 16) | (g << 8) | b;
-    const stripH = H / steps + 1;
-    skyGfx.rect(0, t * H, W, stripH);
-    skyGfx.fill(color);
+    skyGfx.rect(0, t * H, W, H / steps + 1);
+    skyGfx.fill((r << 16) | (g << 8) | b);
   }
   app.stage.addChild(skyGfx);
 
-  // ─── CLOUD SPRITE TEXTURE ───
-  // Generate a soft circular cloud puff texture
-  const cloudTexSize = 256;
-  const cloudCanvas = document.createElement("canvas");
-  cloudCanvas.width = cloudTexSize;
-  cloudCanvas.height = cloudTexSize;
-  const cctx = cloudCanvas.getContext("2d");
-  const gradient = cctx.createRadialGradient(
-    cloudTexSize / 2, cloudTexSize / 2, 0,
-    cloudTexSize / 2, cloudTexSize / 2, cloudTexSize / 2
-  );
-  gradient.addColorStop(0, "rgba(255,255,255,1)");
-  gradient.addColorStop(0.3, "rgba(255,255,255,0.8)");
-  gradient.addColorStop(0.6, "rgba(255,255,255,0.3)");
-  gradient.addColorStop(1, "rgba(255,255,255,0)");
-  cctx.fillStyle = gradient;
-  cctx.fillRect(0, 0, cloudTexSize, cloudTexSize);
-  const cloudTexture = PIXI.Texture.from(cloudCanvas);
-
-  // ─── CLOUD PUFF SPRITES ───
-  const cloudContainer = new PIXI.Container();
-  app.stage.addChild(cloudContainer);
-
-  const cloudSprites = [];
-  for (const puff of CFG.cloudPuffs) {
-    const sprite = new PIXI.Sprite(cloudTexture);
-    sprite.anchor.set(0.5);
-    sprite.originX = puff.x * W;
-    sprite.originY = puff.y * H;
-    sprite.x = sprite.originX;
-    sprite.y = sprite.originY;
-    sprite.scale.set(puff.scale);
-    sprite.alpha = puff.alpha;
-    sprite.baseAlpha = puff.alpha;
-    sprite.noiseOffset = Math.random() * 1000;
-    cloudContainer.addChild(sprite);
-    cloudSprites.push(sprite);
-  }
-
-  // ─── CLOUD DOT PARTICLES (granular texture) ───
-  const cloudDotContainer = new PIXI.Container();
-  app.stage.addChild(cloudDotContainer);
-
-  // Create dot texture
+  // ─── DOT TEXTURE (solid circle, no gradient) ───
   const dotCanvas = document.createElement("canvas");
-  dotCanvas.width = 4;
-  dotCanvas.height = 4;
+  dotCanvas.width = 8;
+  dotCanvas.height = 8;
   const dctx = dotCanvas.getContext("2d");
   dctx.fillStyle = "white";
   dctx.beginPath();
-  dctx.arc(2, 2, 2, 0, Math.PI * 2);
+  dctx.arc(4, 4, 4, 0, Math.PI * 2);
   dctx.fill();
   const dotTexture = PIXI.Texture.from(dotCanvas);
-
-  // Spawn dots within cloud regions
-  const cloudDots = [];
-  for (let i = 0; i < CFG.cloudDotCount; i++) {
-    // Pick a random puff to spawn near
-    const puff = CFG.cloudPuffs[Math.floor(Math.random() * CFG.cloudPuffs.length)];
-    const px = puff.x * W + (Math.random() - 0.5) * puff.scale * 180;
-    const py = puff.y * H + (Math.random() - 0.5) * puff.scale * 120;
-    const depth = Math.random();
-
-    const sprite = new PIXI.Sprite(dotTexture);
-    sprite.anchor.set(0.5);
-    sprite.originX = px;
-    sprite.originY = py;
-    sprite.x = px;
-    sprite.y = py;
-    sprite.scale.set(CFG.cloudDotSize * (0.5 + depth * 0.5) / 2);
-    sprite.alpha = CFG.cloudDotAlpha * (0.3 + depth * 0.7);
-    sprite.baseAlpha = sprite.alpha;
-    sprite.depth = depth;
-    sprite.noiseOffsetX = Math.random() * 1000;
-    sprite.noiseOffsetY = Math.random() * 1000;
-    cloudDotContainer.addChild(sprite);
-    cloudDots.push(sprite);
-  }
-
-  // ─── TEXT PARTICLE CONTAINER ───
-  const textContainer = new PIXI.Container();
-  app.stage.addChild(textContainer);
 
   // ─── NOISE ───
   function noise2D(x, y) {
@@ -206,6 +120,11 @@
     const c = noise2D(ix, iy + 1), d = noise2D(ix + 1, iy + 1);
     return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
   }
+  function fbm(x, y, oct) {
+    let v = 0, a = 1, f = 1, tot = 0;
+    for (let i = 0; i < oct; i++) { v += a * smoothNoise(x * f, y * f); tot += a; a *= 0.5; f *= 2; }
+    return v / tot;
+  }
 
   // ─── MOUSE ───
   const mouse = { x: -9999, y: -9999, vx: 0, vy: 0 };
@@ -215,89 +134,130 @@
   window.addEventListener("mousemove", e => {
     mouse.vx = e.clientX - prevMouse.x;
     mouse.vy = e.clientY - prevMouse.y;
-    prevMouse.x = mouse.x;
-    prevMouse.y = mouse.y;
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    cursorEl.style.left = e.clientX + "px";
-    cursorEl.style.top = e.clientY + "px";
+    prevMouse.x = mouse.x; prevMouse.y = mouse.y;
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    cursorEl.style.left = e.clientX + "px"; cursorEl.style.top = e.clientY + "px";
   });
-  window.addEventListener("mouseleave", () => { mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener("mouseleave", () => { mouse.x = -9999; });
   window.addEventListener("touchmove", e => {
     e.preventDefault();
     const t = e.touches[0];
-    mouse.vx = t.clientX - mouse.x;
-    mouse.vy = t.clientY - mouse.y;
-    mouse.x = t.clientX;
-    mouse.y = t.clientY;
+    mouse.vx = t.clientX - mouse.x; mouse.vy = t.clientY - mouse.y;
+    mouse.x = t.clientX; mouse.y = t.clientY;
   }, { passive: false });
-  window.addEventListener("touchend", () => { mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener("touchend", () => { mouse.x = -9999; });
+
+  // ─── CLOUD PARTICLES ───
+  const cloudContainer = new PIXI.Container();
+  app.stage.addChild(cloudContainer);
+
+  const cloudData = []; // physics data
+  const cloudSprites = []; // pixi sprites
+
+  for (const cloud of CFG.clouds) {
+    const cx = cloud.cx * W;
+    const cy = cloud.cy * H;
+    const baseR = cloud.r * Math.min(W, H);
+
+    for (let i = 0; i < cloud.count; i++) {
+      const puff = cloud.puffs[Math.floor(Math.random() * cloud.puffs.length)];
+      const pcx = cx + puff.ox * baseR;
+      const pcy = cy + puff.oy * baseR;
+      const pr = puff.r * baseR;
+
+      const angle = Math.random() * Math.PI * 2;
+      const rawDist = Math.random() * 0.5 + Math.random() * 0.3 + Math.random() * 0.2;
+      const dist = Math.min(rawDist, 1);
+      let px = pcx + Math.cos(angle) * dist * pr;
+      let py = pcy + Math.sin(angle) * dist * pr * 0.6;
+
+      // Noise displacement
+      const nv = fbm(px * 0.004, py * 0.006, 3);
+      px += nv * baseR * 0.12;
+      py += nv * baseR * 0.08;
+
+      const depth = Math.random();
+      const densityFalloff = 1 - dist * dist;
+      const sizeT = densityFalloff * (0.4 + depth * 0.6);
+      const size = CFG.cloudMinSize + sizeT * (CFG.cloudMaxSize - CFG.cloudMinSize);
+
+      // Lighting: top brighter, bottom slightly darker
+      const normalizedY = (py - (cy - baseR)) / (baseR * 2);
+      const lightFactor = 1.0 - normalizedY * 0.2;
+      const alpha = Math.min(0.65, densityFalloff * (0.1 + depth * 0.35) * lightFactor);
+
+      const sprite = new PIXI.Sprite(dotTexture);
+      sprite.anchor.set(0.5);
+      sprite.x = px;
+      sprite.y = py;
+      sprite.scale.set(size / 4); // dotTexture is 8px, so /4 = diameter in px
+      sprite.alpha = alpha;
+      cloudContainer.addChild(sprite);
+      cloudSprites.push(sprite);
+
+      cloudData.push({
+        originX: px,
+        originY: py,
+        depth,
+        noiseOffsetX: Math.random() * 1000,
+        noiseOffsetY: Math.random() * 1000,
+      });
+    }
+  }
 
   // ─── TEXT PARTICLES ───
-  let textParticles = [];
+  const textContainer = new PIXI.Container();
+  app.stage.addChild(textContainer);
+
+  let textPoints = [];
+  let textSprites = [];
   let time = 0;
 
   function sampleText(text) {
-    const offCanvas = document.createElement("canvas");
-    offCanvas.width = W * dpr;
-    offCanvas.height = H * dpr;
-    const octx = offCanvas.getContext("2d");
+    const off = document.createElement("canvas");
+    off.width = W * dpr; off.height = H * dpr;
+    const octx = off.getContext("2d");
     octx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    octx.fillStyle = "#000";
-    octx.fillRect(0, 0, W, H);
+    octx.fillStyle = "#000"; octx.fillRect(0, 0, W, H);
     octx.fillStyle = "#fff";
     const lines = text.split("\n");
     const fontSize = lines.length > 1 ? CFG.fontSize : CFG.fontSize * 1.2;
     octx.font = `${CFG.fontWeight} ${fontSize}px ${CFG.fontFamily}`;
-    octx.textAlign = "center";
-    octx.textBaseline = "middle";
-    const lineHeight = fontSize * 1.15;
-    const totalHeight = lines.length * lineHeight;
-    const startY = H / 2 - totalHeight / 2 + lineHeight / 2;
-    lines.forEach((line, i) => {
-      octx.fillText(line, W / 2, startY + i * lineHeight);
-    });
-    const imageData = octx.getImageData(0, 0, W * dpr, H * dpr);
-    const data = imageData.data;
-    const points = [];
-    const gap = Math.round(CFG.samplingGap * dpr);
+    octx.textAlign = "center"; octx.textBaseline = "middle";
+    const lh = fontSize * 1.15;
+    const th = lines.length * lh;
+    const sy = H / 2 - th / 2 + lh / 2;
+    lines.forEach((l, i) => octx.fillText(l, W / 2, sy + i * lh));
+    const img = octx.getImageData(0, 0, W * dpr, H * dpr);
+    const d = img.data, pts = [], gap = Math.round(CFG.samplingGap * dpr);
     for (let y = 0; y < H * dpr; y += gap) {
       for (let x = 0; x < W * dpr; x += gap) {
-        const idx = (y * W * dpr + x) * 4;
-        if (data[idx] > 128) {
+        if (d[(y * W * dpr + x) * 4] > 128) {
           const ox = (Math.random() - 0.5) * gap * 0.8;
           const oy = (Math.random() - 0.5) * gap * 0.8;
-          points.push({
-            originX: x / dpr + ox / dpr,
-            originY: y / dpr + oy / dpr,
-            x: x / dpr + ox / dpr,
-            y: y / dpr + oy / dpr,
-            vx: 0, vy: 0,
-            depth: Math.random(),
-            noiseOffsetX: Math.random() * 1000,
-            noiseOffsetY: Math.random() * 1000,
+          pts.push({
+            originX: x / dpr + ox / dpr, originY: y / dpr + oy / dpr,
+            x: x / dpr + ox / dpr, y: y / dpr + oy / dpr,
+            vx: 0, vy: 0, depth: Math.random(),
+            noiseOffsetX: Math.random() * 1000, noiseOffsetY: Math.random() * 1000,
           });
         }
       }
     }
-    return points;
+    return pts;
   }
 
-  // Create dot sprites for text
-  function buildTextSprites(points) {
-    // Clear old
+  function buildTextSprites(pts) {
     textContainer.removeChildren();
     const sprites = [];
-    for (const p of points) {
+    for (const p of pts) {
       const s = new PIXI.Sprite(dotTexture);
       s.anchor.set(0.5);
-      s.x = p.x;
-      s.y = p.y;
+      s.x = p.x; s.y = p.y;
       const ds = (1 - CFG.depthRange) + p.depth * CFG.depthRange;
-      s.scale.set(CFG.particleSize * ds / 2);
+      s.scale.set(CFG.particleSize * ds / 4);
       s.alpha = 0.3 + p.depth * 0.7;
-      s.baseAlpha = s.alpha;
-      s.baseScale = CFG.particleSize * ds / 2;
+      s.baseScale = CFG.particleSize * ds / 4;
       textContainer.addChild(s);
       sprites.push(s);
     }
@@ -305,31 +265,28 @@
   }
 
   let currentTextIndex = 0;
-  let textPoints = sampleText(CFG.texts[0]);
-  let textSprites = buildTextSprites(textPoints);
+  textPoints = sampleText(CFG.texts[0]);
+  textSprites = buildTextSprites(textPoints);
 
   setInterval(() => {
     currentTextIndex = (currentTextIndex + 1) % CFG.texts.length;
-    const newPoints = sampleText(CFG.texts[currentTextIndex]);
-    const maxLen = Math.max(textPoints.length, newPoints.length);
+    const np = sampleText(CFG.texts[currentTextIndex]);
+    const maxLen = Math.max(textPoints.length, np.length);
     const merged = [];
-
     for (let i = 0; i < maxLen; i++) {
-      if (i < textPoints.length && i < newPoints.length) {
-        textPoints[i].originX = newPoints[i].originX;
-        textPoints[i].originY = newPoints[i].originY;
+      if (i < textPoints.length && i < np.length) {
+        textPoints[i].originX = np[i].originX;
+        textPoints[i].originY = np[i].originY;
         merged.push(textPoints[i]);
-      } else if (i < newPoints.length) {
+      } else if (i < np.length) {
         const src = textPoints[Math.floor(Math.random() * textPoints.length)];
-        const np = newPoints[i];
-        np.x = src ? src.x : np.originX;
-        np.y = src ? src.y : np.originY;
-        np.vx = (Math.random() - 0.5) * 2;
-        np.vy = (Math.random() - 0.5) * 2;
-        merged.push(np);
+        np[i].x = src ? src.x : np[i].originX;
+        np[i].y = src ? src.y : np[i].originY;
+        np[i].vx = (Math.random() - 0.5) * 2;
+        np[i].vy = (Math.random() - 0.5) * 2;
+        merged.push(np[i]);
       }
     }
-
     textPoints = merged;
     textSprites = buildTextSprites(textPoints);
   }, CFG.textInterval);
@@ -338,46 +295,31 @@
   app.ticker.add((ticker) => {
     const dt = Math.min(ticker.deltaMS / 1000, 0.05);
     time += dt;
-
-    const mx = mouse.x, my = mouse.y;
-    const mvx = mouse.vx, mvy = mouse.vy;
+    const mx = mouse.x, my = mouse.y, mvx = mouse.vx, mvy = mouse.vy;
     const cr = CFG.cursorRadius, crSq = cr * cr;
 
-    // ── Update text particles ──
+    // Text particles
     for (let i = 0; i < textPoints.length; i++) {
       const p = textPoints[i];
       if (!textSprites[i]) continue;
-
-      const breathX = smoothNoise(p.noiseOffsetX + time * 0.3, p.noiseOffsetY) * CFG.breathing * 20;
-      const breathY = smoothNoise(p.noiseOffsetX, p.noiseOffsetY + time * 0.3) * CFG.breathing * 20;
-      const targetX = p.originX + breathX;
-      const targetY = p.originY + breathY;
-
-      const dx = p.x - mx, dy = p.y - my;
-      const distSq = dx * dx + dy * dy;
-      if (distSq < crSq && distSq > 0.01) {
-        const dist = Math.sqrt(distSq);
-        const t = 1 - dist / cr;
-        const ndx = dx / dist, ndy = dy / dist;
-        if (CFG.radial > 0) { p.vx += ndx * t * t * CFG.radial * 15; p.vy += ndy * t * t * CFG.radial * 15; }
-        if (CFG.wind > 0) { p.vx += mvx * t * CFG.wind * 0.8; p.vy += mvy * t * CFG.wind * 0.8; }
-        if (CFG.vortex > 0) { p.vx += -ndy * t * CFG.vortex * 5; p.vy += ndx * t * CFG.vortex * 5; }
-        if (CFG.turbulence > 0) { const f = t * CFG.turbulence * 8; p.vx += (Math.random() - 0.5) * f; p.vy += (Math.random() - 0.5) * f; }
+      const bx = smoothNoise(p.noiseOffsetX + time * 0.3, p.noiseOffsetY) * CFG.breathing * 20;
+      const by = smoothNoise(p.noiseOffsetX, p.noiseOffsetY + time * 0.3) * CFG.breathing * 20;
+      const tx = p.originX + bx, ty = p.originY + by;
+      const dx = p.x - mx, dy = p.y - my, dSq = dx * dx + dy * dy;
+      if (dSq < crSq && dSq > 0.01) {
+        const d = Math.sqrt(dSq), t = 1 - d / cr, nx = dx / d, ny = dy / d;
+        p.vx += nx * t * t * CFG.radial * 15; p.vy += ny * t * t * CFG.radial * 15;
+        p.vx += mvx * t * CFG.wind * 0.8; p.vy += mvy * t * CFG.wind * 0.8;
+        p.vx += -ny * t * CFG.vortex * 5; p.vy += nx * t * CFG.vortex * 5;
+        const f = t * CFG.turbulence * 8;
+        p.vx += (Math.random() - 0.5) * f; p.vy += (Math.random() - 0.5) * f;
       }
-
-      p.vx += (targetX - p.x) * CFG.spring;
-      p.vy += (targetY - p.y) * CFG.spring;
-      p.vx *= CFG.damping;
-      p.vy *= CFG.damping;
-      p.x += p.vx;
-      p.y += p.vy;
-
+      p.vx += (tx - p.x) * CFG.spring; p.vy += (ty - p.y) * CFG.spring;
+      p.vx *= CFG.damping; p.vy *= CFG.damping;
+      p.x += p.vx; p.y += p.vy;
       const s = textSprites[i];
-      s.x = p.x;
-      s.y = p.y;
-
-      // Size boost near cursor
-      const cdSq = (p.x - mx) * (p.x - mx) + (p.y - my) * (p.y - my);
+      s.x = p.x; s.y = p.y;
+      const cdSq = (p.x - mx) ** 2 + (p.y - my) ** 2;
       if (cdSq < crSq) {
         const t = 1 - Math.sqrt(cdSq) / cr;
         s.scale.set(s.baseScale * (1 + t * (CFG.dotSizeBoost - 1)));
@@ -386,61 +328,26 @@
       }
     }
 
-    // ── Update cloud puff sprites ──
+    // Cloud particles
     const cmr = CFG.cloudMouseRadius, cmrSq = cmr * cmr;
-    for (const sprite of cloudSprites) {
-      // Wind drift
-      sprite.originX += CFG.cloudWindSpeed * dt;
-      if (sprite.originX > W + 200) sprite.originX -= W + 400;
-
-      // Gentle breathing
-      const bx = smoothNoise(sprite.noiseOffset + time * 0.1, 0) * 10;
-      const by = smoothNoise(0, sprite.noiseOffset + time * 0.1) * 6;
-
-      sprite.x = sprite.originX + bx;
-      sprite.y = sprite.originY + by;
-
-      // Mouse push
-      const dx = sprite.x - mx, dy = sprite.y - my;
-      const distSq = dx * dx + dy * dy;
-      if (distSq < cmrSq && distSq > 0.01) {
-        const dist = Math.sqrt(distSq);
-        const t = 1 - dist / cmr;
-        sprite.x += (dx / dist) * t * t * CFG.cloudMouseForce;
-        sprite.y += (dy / dist) * t * t * CFG.cloudMouseForce;
+    for (let i = 0; i < cloudData.length; i++) {
+      const cd = cloudData[i];
+      const cs = cloudSprites[i];
+      cd.originX += CFG.cloudWindSpeed * (0.3 + cd.depth * 0.7) * dt;
+      if (cd.originX > W + 80) cd.originX -= W + 160;
+      if (cd.originX < -80) cd.originX += W + 160;
+      const bx = smoothNoise(cd.noiseOffsetX + time * 0.15, cd.noiseOffsetY) * CFG.cloudBreathing * 8;
+      const by = smoothNoise(cd.noiseOffsetX, cd.noiseOffsetY + time * 0.15) * CFG.cloudBreathing * 5;
+      let x = cd.originX + bx, y = cd.originY + by;
+      const dx = x - mx, dy = y - my, dSq = dx * dx + dy * dy;
+      if (dSq < cmrSq && dSq > 0.01) {
+        const d = Math.sqrt(dSq), t = 1 - d / cmr;
+        x += (dx / d) * t * t * CFG.cloudMouseForce;
+        y += (dy / d) * t * t * CFG.cloudMouseForce;
       }
-    }
-
-    // ── Update cloud dot particles ──
-    for (const dot of cloudDots) {
-      dot.originX += CFG.cloudWindSpeed * (0.3 + dot.depth * 0.7) * dt;
-      if (dot.originX > W + 100) dot.originX -= W + 200;
-
-      const bx = smoothNoise(dot.noiseOffsetX + time * 0.15, dot.noiseOffsetY) * 6;
-      const by = smoothNoise(dot.noiseOffsetX, dot.noiseOffsetY + time * 0.15) * 4;
-      dot.x = dot.originX + bx;
-      dot.y = dot.originY + by;
-
-      const dx = dot.x - mx, dy = dot.y - my;
-      const distSq = dx * dx + dy * dy;
-      if (distSq < cmrSq && distSq > 0.01) {
-        const dist = Math.sqrt(distSq);
-        const t = 1 - dist / cmr;
-        dot.x += (dx / dist) * t * t * CFG.cloudMouseForce * 0.5;
-        dot.y += (dy / dist) * t * t * CFG.cloudMouseForce * 0.5;
-      }
+      cs.x = x; cs.y = y;
     }
   });
 
-  // ─── RESIZE ───
-  window.addEventListener("resize", () => {
-    location.reload();
-  });
-
-  // ─── MODE SWITCH ───
-  document.addEventListener("keydown", e => {
-    if (e.key === "m" || e.key === "M") {
-      // Future: toggle render modes
-    }
-  });
+  window.addEventListener("resize", () => location.reload());
 })();
