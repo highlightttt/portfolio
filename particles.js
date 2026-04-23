@@ -41,23 +41,49 @@ const CFG = {
   skyBottom: [80, 160, 235],
 
   // ─── CLOUDS ───
-  cloudCount: 40000,
-  cloudParticleSize: 1.4,
-  cloudColor: [255, 255, 255],
-  cloudDepthRange: 0.5,
-  cloudWindSpeed: 8,       // px per second
-  cloudBreathing: 0.3,
-  cloudMouseRadius: 170,   // larger influence for clouds
+  cloudCount: 50000,
+  cloudMinSize: 0.5,
+  cloudMaxSize: 3.0,
+  cloudDepthRange: 0.6,
+  cloudWindSpeed: 6,
+  cloudBreathing: 0.25,
+  cloudMouseRadius: 170,
   cloudMouseForce: 25,
 
-  // Cloud shapes: {cx, cy} as fraction of W/H, rx/ry as fraction of W/H
+  // Each cloud = array of overlapping "puffs" for organic shape
+  // puff: {ox, oy} offset from cloud center (fraction of cloud radius)
   clouds: [
-    { cx: 0.72, cy: 0.68, rx: 0.22, ry: 0.18, density: 1.0 },
-    { cx: 0.22, cy: 0.73, rx: 0.18, ry: 0.14, density: 0.9 },
-    { cx: 0.85, cy: 0.32, rx: 0.12, ry: 0.09, density: 0.7 },
-    { cx: 0.12, cy: 0.28, rx: 0.10, ry: 0.07, density: 0.6 },
-    { cx: 0.50, cy: 0.52, rx: 0.25, ry: 0.10, density: 0.5 },
-    { cx: 0.50, cy: 0.90, rx: 0.50, ry: 0.10, density: 0.8 },
+    // Large cumulus bottom-right
+    { cx: 0.70, cy: 0.65, r: 0.13, count: 12000, puffs: [
+      {ox: 0, oy: 0, r: 1.0}, {ox: -0.6, oy: 0.1, r: 0.7}, {ox: 0.5, oy: -0.1, r: 0.8},
+      {ox: -0.3, oy: -0.3, r: 0.6}, {ox: 0.3, oy: -0.25, r: 0.65}, {ox: 0.7, oy: 0.2, r: 0.5},
+      {ox: -0.8, oy: -0.1, r: 0.45}, {ox: 0.1, oy: 0.3, r: 0.55},
+    ]},
+    // Large cumulus bottom-left  
+    { cx: 0.25, cy: 0.70, r: 0.11, count: 10000, puffs: [
+      {ox: 0, oy: 0, r: 1.0}, {ox: -0.5, oy: -0.15, r: 0.7}, {ox: 0.6, oy: 0.05, r: 0.65},
+      {ox: 0.2, oy: -0.3, r: 0.6}, {ox: -0.3, oy: 0.2, r: 0.5}, {ox: 0.5, oy: -0.2, r: 0.4},
+    ]},
+    // Medium cloud top-right
+    { cx: 0.82, cy: 0.30, r: 0.08, count: 6000, puffs: [
+      {ox: 0, oy: 0, r: 1.0}, {ox: -0.5, oy: 0.1, r: 0.6}, {ox: 0.4, oy: -0.1, r: 0.7},
+      {ox: 0.6, oy: 0.15, r: 0.4},
+    ]},
+    // Small cloud top-left
+    { cx: 0.15, cy: 0.25, r: 0.06, count: 4000, puffs: [
+      {ox: 0, oy: 0, r: 1.0}, {ox: 0.5, oy: -0.1, r: 0.6}, {ox: -0.4, oy: 0.1, r: 0.5},
+    ]},
+    // Wispy middle cloud
+    { cx: 0.48, cy: 0.50, r: 0.10, count: 7000, puffs: [
+      {ox: -0.5, oy: 0, r: 0.6}, {ox: 0, oy: 0, r: 0.7}, {ox: 0.5, oy: 0, r: 0.6},
+      {ox: -0.9, oy: 0.05, r: 0.35}, {ox: 0.9, oy: -0.05, r: 0.35},
+    ]},
+    // Bottom horizon haze
+    { cx: 0.50, cy: 0.92, r: 0.08, count: 11000, puffs: [
+      {ox: -1.5, oy: 0, r: 0.7}, {ox: -0.7, oy: 0, r: 0.8}, {ox: 0, oy: 0, r: 0.9},
+      {ox: 0.7, oy: 0, r: 0.8}, {ox: 1.5, oy: 0, r: 0.7},
+      {ox: -1.1, oy: 0.1, r: 0.5}, {ox: 1.1, oy: -0.1, r: 0.5},
+    ]},
   ],
 };
 
@@ -135,40 +161,62 @@ let cloudParticles = [];
 
 function initCloudParticles() {
   cloudParticles = [];
-  const totalWeight = CFG.clouds.reduce((s, c) => s + c.density * c.rx * c.ry, 0);
 
   for (const cloud of CFG.clouds) {
-    const count = Math.floor(CFG.cloudCount * (cloud.density * cloud.rx * cloud.ry) / totalWeight);
     const cx = cloud.cx * W;
     const cy = cloud.cy * H;
-    const rx = cloud.rx * W;
-    const ry = cloud.ry * H;
+    const baseR = cloud.r * Math.min(W, H);
 
-    for (let i = 0; i < count; i++) {
-      let px, py, ok = false;
-      for (let a = 0; a < 10; a++) {
-        const ax = (Math.random() - 0.5) * 2;
-        const ay = (Math.random() - 0.5) * 2;
-        if (ax * ax + ay * ay > 1) continue;
-        px = cx + ax * rx;
-        py = cy + ay * ry;
-        const noiseVal = fbm(px * 0.003, py * 0.005, 4);
-        const dist = Math.sqrt(ax * ax + ay * ay);
-        const dens = Math.max(0, (1 - dist * dist) * (0.5 + noiseVal * 0.5));
-        if (Math.random() < dens) { ok = true; break; }
-      }
-      if (!ok) continue;
+    for (let i = 0; i < cloud.count; i++) {
+      // Pick a random puff to spawn in
+      const puff = cloud.puffs[Math.floor(Math.random() * cloud.puffs.length)];
+      const puffCx = cx + puff.ox * baseR;
+      const puffCy = cy + puff.oy * baseR;
+      const puffR = puff.r * baseR;
 
+      // Sample within this puff — gaussian-ish distribution (sum of randoms)
+      const angle = Math.random() * Math.PI * 2;
+      // Use sqrt for uniform disk, then bias toward center for density
+      const rawDist = Math.random() * 0.5 + Math.random() * 0.3 + Math.random() * 0.2;
+      const dist = Math.min(rawDist, 1);
+      let px = puffCx + Math.cos(angle) * dist * puffR;
+      let py = puffCy + Math.sin(angle) * dist * puffR * 0.65; // flatten vertically
+
+      // Add noise displacement for organic edges
+      const nv = fbm(px * 0.004, py * 0.006, 3);
+      px += nv * baseR * 0.15;
+      py += nv * baseR * 0.1;
+
+      // Density: center-heavy falloff
+      const densityFalloff = 1 - dist * dist;
+
+      // Depth layer
       const depth = Math.random();
+
+      // Size: larger near center, smaller at edges
+      const sizeT = densityFalloff * (0.5 + depth * 0.5);
+      const size = CFG.cloudMinSize + sizeT * (CFG.cloudMaxSize - CFG.cloudMinSize);
+
+      // Alpha: more opaque in center, transparent at edges
+      // Also top of cloud brighter (lighting)
+      const normalizedY = (py - (cy - baseR)) / (baseR * 2); // 0=top, 1=bottom
+      const lightFactor = 1.0 - normalizedY * 0.25; // top 100%, bottom 75%
+      const alpha = Math.min(0.7, densityFalloff * (0.15 + depth * 0.4) * lightFactor);
+
+      // Color: slightly gray at bottom for shadow
+      const gray = Math.floor(255 * (0.85 + lightFactor * 0.15));
+
       cloudParticles.push({
         originX: px,
         originY: py,
         x: px,
         y: py,
         depth,
+        size,
         noiseOffsetX: Math.random() * 1000,
         noiseOffsetY: Math.random() * 1000,
-        baseAlpha: 0.15 + depth * 0.5,
+        baseAlpha: alpha,
+        r: gray, g: gray, b: gray,
       });
     }
   }
@@ -347,13 +395,12 @@ function renderSky() {
 }
 
 function renderClouds() {
-  const [r, g, b] = CFG.cloudColor;
   for (let i = 0; i < cloudParticles.length; i++) {
     const p = cloudParticles[i];
     const ds = (1 - CFG.cloudDepthRange) + p.depth * CFG.cloudDepthRange;
-    const size = CFG.cloudParticleSize * ds;
+    const size = p.size * ds;
     ctx.globalAlpha = p.baseAlpha * ds;
-    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillStyle = `rgb(${p.r},${p.g},${p.b})`;
     ctx.beginPath();
     ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
     ctx.fill();
