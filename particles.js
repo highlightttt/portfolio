@@ -12,8 +12,8 @@ const CFG = {
   fontWeight: "700",
 
   // Text particles
-  samplingGap: 5,
-  particleSize: 1.0,
+  samplingGap: 3,
+  particleSize: 1.2,
   particleColor: [255, 255, 255],
   renderMode: "dot",
   charSet: "01",
@@ -41,8 +41,8 @@ const CFG = {
   skyBottom: [80, 160, 235],
 
   // ─── CLOUDS ───
-  cloudCount: 25000,
-  cloudParticleSize: 1.2,
+  cloudCount: 40000,
+  cloudParticleSize: 1.4,
   cloudColor: [255, 255, 255],
   cloudDepthRange: 0.5,
   cloudWindSpeed: 8,       // px per second
@@ -201,7 +201,8 @@ function sampleText(text) {
   const imageData = octx.getImageData(0, 0, W * dpr, H * dpr);
   const data = imageData.data;
   const points = [];
-  const gap = CFG.samplingGap;
+  // Adapt sampling to DPR: low-DPR (external monitors) get tighter gap
+  const gap = Math.max(2, Math.round(CFG.samplingGap * dpr));
   for (let y = 0; y < H * dpr; y += gap) {
     for (let x = 0; x < W * dpr; x += gap) {
       const idx = (y * W * dpr + x) * 4;
@@ -350,7 +351,7 @@ function renderClouds() {
   for (let i = 0; i < cloudParticles.length; i++) {
     const p = cloudParticles[i];
     const ds = (1 - CFG.cloudDepthRange) + p.depth * CFG.cloudDepthRange;
-    const size = CFG.cloudParticleSize * ds;
+    const size = CFG.cloudParticleSize * ds / Math.max(1, dpr * 0.7);
     ctx.globalAlpha = p.baseAlpha * ds;
     ctx.fillStyle = `rgb(${r},${g},${b})`;
     ctx.beginPath();
@@ -369,7 +370,7 @@ function renderText() {
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       const ds = (1 - CFG.depthRange) + p.depth * CFG.depthRange;
-      let size = CFG.particleSize * ds;
+      let size = CFG.particleSize * ds / Math.max(1, dpr * 0.7);
       const alpha = 0.3 + p.depth * 0.7;
 
       const cdx = p.x - mx, cdy = p.y - my;
