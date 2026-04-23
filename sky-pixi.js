@@ -398,10 +398,18 @@
     }
   });
 
-  // ─── RESIZE → RELOAD ───
-  let resizeTimer;
+  // ─── RESIZE → RELOAD (only on significant size change) ───
+  let lastW = W, lastH = H, resizeTimer;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => location.reload(), 300);
+    resizeTimer = setTimeout(() => {
+      const newW = window.innerWidth, newH = window.innerHeight;
+      // Only reload if width changed or height changed significantly (>20%)
+      // This avoids mobile address bar show/hide triggering reload
+      if (Math.abs(newW - lastW) > 50 || Math.abs(newH - lastH) / lastH > 0.2) {
+        location.reload();
+      }
+      lastW = newW; lastH = newH;
+    }, 500);
   });
 })();
