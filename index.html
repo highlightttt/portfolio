@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jesse Lai · Portfolio</title>
+  <title>Jesse Lai · Portfolio — Sky</title>
   <style>
     * { margin: 0; padding: 0; }
-    body { background: #1a6dd4; overflow: hidden; cursor: none; }
+    body { overflow: hidden; cursor: none; }
     canvas { display: block; }
     #cursor {
       position: fixed; pointer-events: none; z-index: 999;
@@ -16,11 +16,11 @@
       transition: width 0.2s, height 0.2s;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="cursor"></div>
-  <canvas id="c"></canvas>
-  <script src="particles.js?v=14"></script>
+  <!-- PixiJS v8 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js"></script>
+  <script src="sky-pixi.js"></script>
 </body>
 </html>
