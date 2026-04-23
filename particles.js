@@ -12,7 +12,7 @@ const CFG = {
   fontWeight: "700",
 
   // Text particles
-  samplingGap: 4,
+  samplingGap: 2,          // CSS pixels between samples (consistent across DPR)
   particleSize: 1.0,
   particleColor: [255, 255, 255],
   renderMode: "dot",
@@ -201,8 +201,8 @@ function sampleText(text) {
   const imageData = octx.getImageData(0, 0, W * dpr, H * dpr);
   const data = imageData.data;
   const points = [];
-  // Fixed gap in device pixels — ensures consistent density across DPR
-  const gap = CFG.samplingGap;
+  // Convert CSS pixel gap to device pixels so density looks the same on all screens
+  const gap = Math.round(CFG.samplingGap * dpr);
   for (let y = 0; y < H * dpr; y += gap) {
     for (let x = 0; x < W * dpr; x += gap) {
       const idx = (y * W * dpr + x) * 4;
