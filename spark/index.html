@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Jesse Lai · Portfolio (Spark)</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; overflow: hidden; background: #0a0a0a; }
+    canvas { display: block; touch-action: none; }
+    #cursor {
+      position: fixed; pointer-events: none; z-index: 999;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s;
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js",
+        "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.0.0/spark.module.js"
+      }
+    }
+  </script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
