@@ -12,8 +12,8 @@ const CFG = {
   fontWeight: "700",
 
   // Text particles
-  samplingGap: 3,
-  particleSize: 1.2,
+  samplingGap: 4,
+  particleSize: 1.0,
   particleColor: [255, 255, 255],
   renderMode: "dot",
   charSet: "01",
@@ -201,8 +201,8 @@ function sampleText(text) {
   const imageData = octx.getImageData(0, 0, W * dpr, H * dpr);
   const data = imageData.data;
   const points = [];
-  // Adapt sampling to DPR: low-DPR (external monitors) get tighter gap
-  const gap = Math.max(2, Math.round(CFG.samplingGap * dpr));
+  // Fixed gap in device pixels — ensures consistent density across DPR
+  const gap = CFG.samplingGap;
   for (let y = 0; y < H * dpr; y += gap) {
     for (let x = 0; x < W * dpr; x += gap) {
       const idx = (y * W * dpr + x) * 4;
@@ -351,7 +351,7 @@ function renderClouds() {
   for (let i = 0; i < cloudParticles.length; i++) {
     const p = cloudParticles[i];
     const ds = (1 - CFG.cloudDepthRange) + p.depth * CFG.cloudDepthRange;
-    const size = CFG.cloudParticleSize * ds / Math.max(1, dpr * 0.7);
+    const size = CFG.cloudParticleSize * ds;
     ctx.globalAlpha = p.baseAlpha * ds;
     ctx.fillStyle = `rgb(${r},${g},${b})`;
     ctx.beginPath();
@@ -370,7 +370,7 @@ function renderText() {
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       const ds = (1 - CFG.depthRange) + p.depth * CFG.depthRange;
-      let size = CFG.particleSize * ds / Math.max(1, dpr * 0.7);
+      let size = CFG.particleSize * ds;
       const alpha = 0.3 + p.depth * 0.7;
 
       const cdx = p.x - mx, cdy = p.y - my;
