@@ -254,15 +254,14 @@
       const densityFalloff = 1 - dist * dist;
       const sizeT = densityFalloff * (0.4 + depth * 0.6);
       const size = CFG.cloudMinSize + sizeT * (CFG.cloudMaxSize - CFG.cloudMinSize);
-      const normalizedY = (py - (cy - baseR)) / (baseR * 2);
-      const lightFactor = 1.0 - normalizedY * 0.2;
-      const alpha = Math.min(0.65, densityFalloff * (0.1 + depth * 0.35) * lightFactor);
+      const alpha = densityFalloff > 0.3 ? 1.0 : 0;  // no semi-transparency
+      if (alpha === 0) continue;
 
       const sprite = new PIXI.Sprite(dotTexture);
       sprite.anchor.set(0.5);
       sprite.x = px; sprite.y = py;
       sprite.scale.set(size / 4);
-      sprite.alpha = alpha;
+      sprite.alpha = 1.0;
       cloudContainer.addChild(sprite);
       cloudSprites.push(sprite);
       cloudData.push({
